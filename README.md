@@ -1,4 +1,6 @@
-# accounts
+# InCharge Accounts
+
+Accounts for incharge app.
 
 ## Project setup
 ```
