@@ -11,16 +11,18 @@
       </div>
       <ul id="nav-mobile" class="hide-on-med-and-down right">
         <li>
-          <a href="/login.html"
+          <router-link
+            to="/login"
             class="btn transparent z-depth-0 waves-effect waves-light nav--login">
             Login
-          </a>
+          </router-link>
         </li>
         <li>
-          <a href="/signup.html"
+          <router-link
+            to="/signup"
             class="btn white primary-text z-depth-0 waves-effect waves-primary nav--signup">
             Sign up
-          </a>
+          </router-link>
         </li>
       </ul>
     </div>

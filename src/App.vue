@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Product+Sans|Lato&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Product+Sans:300,400|Lato:300,400&display=swap');
 
 body {
   margin: 0;

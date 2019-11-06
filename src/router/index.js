@@ -35,6 +35,15 @@ const routes = [
       title: 'Reset Password - In-Charge',
     },
   },
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: () => import(/* webpackChunckName: "page-not-found" */ '../views/Errors/NotFound404.vue'),
+    meta: {
+      auth: false,
+      title: 'Page Not Found - In-Charge',
+    },
+  },
 ];
 
 const router = new VueRouter({
