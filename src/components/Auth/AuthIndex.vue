@@ -59,9 +59,11 @@ export default {
   width: 90%;
   padding: 30px;
   max-width: 377px;
+  overflow-y: auto;
   position: relative;
   border-radius: 4px;
   background-color: #fff;
+  max-height: calc(100vh - 100px) !important;
   h5 {
     font-size: 26px;
     margin: 20px;

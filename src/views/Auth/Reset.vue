@@ -13,6 +13,25 @@
     </template>
 
     <form action="#" @submit.prevent="validateAndSubmit">
+      <div class="input-group">
+        <label for="email">E-mail address</label>
+        <input
+          id="email"
+          type="email"
+          v-model.trim="$v.email.$model"
+          placeholder="john.doe@example.com">
+
+        <small
+          class="error"
+          v-if="$v.email.$dirty && !$v.email.required">
+          Email is required
+        </small>
+
+        <small class="error" v-if="!$v.email.email">
+          Email must be a valid email address
+        </small>
+      </div>
+
       <div class="input-group" :class="{ '--error': $v.password.$error }">
         <label for="password">Enter new password</label>
         <input
@@ -38,6 +57,7 @@
           id="confirm-password"
           placeholder="***********"
           v-model.trim="$v.confirmPassword.$model">
+
         <small class="error" v-if="!$v.confirmPassword.sameAsPassword">
           Passwords must be identical.
         </small>
@@ -52,7 +72,12 @@
 <script>
 // Import from node_modules first
 import M from 'materialize-css';
-import { required, sameAs, minLength } from 'vuelidate/lib/validators';
+import {
+  sameAs,
+  required,
+  minLength,
+  email as emailValidator,
+} from 'vuelidate/lib/validators';
 // Import from files directory.
 import { BASE_API } from '@/config';
 import AuthIndex from '@/components/Auth/AuthIndex.vue';
@@ -63,6 +88,7 @@ export default {
   components: { AuthIndex },
   data() {
     return {
+      email: '',
       password: '',
       submitting: false,
       confirmPassword: '',
@@ -78,26 +104,25 @@ export default {
       this.submitting = true;
 
       try {
-        const response = await this.submit();
+        const { data: { message } } = await this.submit();
         M.toast({
-          html: '<span class="success">Success!</span> you have reset your password.',
+          html: `<span class="success">Success!</span>&nbsp;${message}.`,
         });
         this.submitting = false;
-        console.log(response);
       } catch (e) {
         this.submitting = false;
         M.toast({
           html: '<span class="error">Whoops!</span>&nbsp;Something went wrong.',
         });
-        console.error(e);
       }
 
       return true;
     },
     submit() {
-      const { password, confirmPassword } = this;
+      const { email, password, confirmPassword } = this;
       return this.$http
-        .post(`${BASE_API}/v1/tutor/password/reset`, {
+        .post(`${BASE_API}user/password/reset`, {
+          email,
           password,
           confirmPassword,
           token: this.$route.params.token,
@@ -105,6 +130,10 @@ export default {
     },
   },
   validations: {
+    email: {
+      required,
+      email: emailValidator,
+    },
     password: {
       required,
       minLength: minLength(6),
@@ -130,12 +159,13 @@ export default {
   }
 
   input {
-    border: 1px solid #DADAED;
-    border-radius: 4px;
-    margin: 10px 0;
     padding: 15px;
     color: #2A2A2A;
+    margin: 10px 0;
+    border-radius: 4px;
     box-sizing: border-box;
+    border: 1px solid #DADAED;
+    font-size: 14px !important;
     &::placeholder {
       color: #dddddd;
     }
