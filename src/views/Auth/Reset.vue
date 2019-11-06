@@ -97,10 +97,10 @@ export default {
   methods: {
     async validateAndSubmit() {
       this.$v.$touch();
+
       if (this.$v.$invalid) {
         return false;
       }
-
       this.submitting = true;
 
       try {
@@ -110,10 +110,26 @@ export default {
         });
         this.submitting = false;
       } catch (e) {
+        const { response } = e;
         this.submitting = false;
-        M.toast({
-          html: '<span class="error">Whoops!</span>&nbsp;Something went wrong.',
-        });
+
+        if (response && response.status === 422) {
+          const { data: { message, errors } } = response;
+          if (message) {
+            M.toast({
+              html: `<span class="error">Whoops!</span>&nbsp;${message}`,
+            });
+          }
+          Object.values(errors).forEach((v) => {
+            v.forEach(m => M.toast({
+              html: `<span class="error">Whoops!</span>&nbsp;${m}`,
+            }));
+          });
+        } else {
+          M.toast({
+            html: '<span class="error">Whoops!</span>&nbsp;Something went wrong.',
+          });
+        }
       }
 
       return true;
@@ -124,7 +140,7 @@ export default {
         .post(`${BASE_API}user/password/reset`, {
           email,
           password,
-          confirmPassword,
+          password_confirmation: confirmPassword,
           token: this.$route.params.token,
         });
     },

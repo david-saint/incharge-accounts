@@ -35,9 +35,12 @@ body {
 }
 
 .toast {
+  font-size: 13px;
   span.error {
+    display: block;
     font-weight: 700;
-    color: $error-color !important;
+    margin-right: 5px;
+    color: $warning-color !important;
   }
   span.success {
     font-weight: 700;
