@@ -9,6 +9,10 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    meta: {
+      auth: true,
+      title: 'My Account - In-Charge',
+    },
   },
   {
     path: '/about',
@@ -17,11 +21,34 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      auth: false,
+      title: 'About In-Charge',
+    },
+  },
+  {
+    path: '/reset-password/:token',
+    name: 'reset-password',
+    component: () => import(/* webpackChunkName: "password-rest" */ '../views/Auth/Reset.vue'),
+    meta: {
+      auth: false,
+      title: 'Reset Password - In-Charge',
+    },
+  },
+  {
+    path: '*',
+    name: 'page-not-found',
+    component: () => import(/* webpackChunckName: "page-not-found" */ '../views/Errors/NotFound404.vue'),
+    meta: {
+      auth: false,
+      title: 'Page Not Found - In-Charge',
+    },
   },
 ];
 
 const router = new VueRouter({
   mode: 'history',
+  linkActiveClass: 'active',
   base: process.env.BASE_URL,
   routes,
 });
