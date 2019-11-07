@@ -22,8 +22,25 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
-      auth: false,
       title: 'About In-Charge',
+    },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Auth/Login.vue'),
+    meta: {
+      auth: false,
+      title: 'Login to your account - In-Charge',
+    },
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Auth/Signup.vue'),
+    meta: {
+      auth: false,
+      title: 'Create a new account - In-Charge',
     },
   },
   {
@@ -40,7 +57,6 @@ const routes = [
     name: 'page-not-found',
     component: () => import(/* webpackChunckName: "page-not-found" */ '../views/Errors/NotFound404.vue'),
     meta: {
-      auth: false,
       title: 'Page Not Found - In-Charge',
     },
   },

@@ -27,6 +27,7 @@ Vue.use(VueAuth, {
   },
   logoutData: {
     method: 'POST',
+    redirect: { name: 'login' },
     url: `${BASE_API}/user/logout`,
   },
   refreshData: {
