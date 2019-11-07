@@ -46,7 +46,7 @@ const routes = [
   {
     path: '/forgot-password',
     name: 'forgot-passowrd',
-    component: () => import(/**/ '../views/Auth/Forgot.vue'),
+    component: () => import(/* webpackChunkName: "password-forgot" */ '../views/Auth/Forgot.vue'),
     meta: {
       auth: false,
       title: 'Forgot your Password - In-Charge',
@@ -59,6 +59,14 @@ const routes = [
     meta: {
       auth: false,
       title: 'Reset Password - In-Charge',
+    },
+  },
+  {
+    path: '/email-verified',
+    name: 'email-verified',
+    component: () => import(/* webpackChunkName: "verified-email" */ '../views/Extras/VerifiedEmail.vue'),
+    meta: {
+      title: '🥳 Congratulations!! You have verified your email',
     },
   },
   {
