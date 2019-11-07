@@ -137,7 +137,7 @@ export default {
     submit() {
       const { email, password, confirmPassword } = this;
       return this.$http
-        .post(`${BASE_API}user/password/reset`, {
+        .post(`${BASE_API}/user/password/reset`, {
           email,
           password,
           password_confirmation: confirmPassword,
