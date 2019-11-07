@@ -44,6 +44,15 @@ const routes = [
     },
   },
   {
+    path: '/forgot-password',
+    name: 'forgot-passowrd',
+    component: () => import(/**/ '../views/Auth/Forgot.vue'),
+    meta: {
+      auth: false,
+      title: 'Forgot your Password - In-Charge',
+    },
+  },
+  {
     path: '/reset-password/:token',
     name: 'reset-password',
     component: () => import(/* webpackChunkName: "password-rest" */ '../views/Auth/Reset.vue'),

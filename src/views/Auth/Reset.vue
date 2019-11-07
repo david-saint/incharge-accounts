@@ -13,7 +13,7 @@
     </template>
 
     <form action="#" @submit.prevent="validateAndSubmit">
-      <div class="input-group">
+      <div class="input-group" :class="{ '--error': $v.email.$error }">
         <label for="email">E-mail address</label>
         <input
           id="email"
@@ -111,6 +111,7 @@ export default {
           html: `<span class="success">Success!</span>&nbsp;${message}.`,
         });
         this.submitting = false;
+        this.$router.push({ name: 'login' });
       } catch (e) {
         const { response } = e;
         this.submitting = false;

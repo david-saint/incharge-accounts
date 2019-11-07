@@ -1,15 +1,15 @@
 <template>
   <auth-index :loading="submitting">
     <template v-slot:title-desktop>
-      Login
+      Forgot Password
     </template>
 
     <template v-slot:title-mobile>
-      Glad to see you again!
+      Enter the email to retrieve password
     </template>
 
     <template v-slot:subtitle>
-      Fill in the email address and password yor registered with to access your In-Charge account.
+      Fill in the email address of the account you wish to retrieve password for.
     </template>
 
     <form action="#" @submit.prevent="validateAndSubmit">
@@ -33,58 +33,28 @@
         </small>
       </div>
 
-      <div class="input-group" :class="{ '--error': $v.password.$error }">
-        <label for="password">Enter password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="***********"
-          autocomplete="current-password"
-          v-model.trim="$v.password.$model">
-
-        <small
-          class="error"
-          v-if="$v.password.$dirty && !$v.password.required">
-          Password is required.
-        </small>
-
-        <small class="error" v-if="!$v.password.minLength">
-          Password must have at least {{ $v.password.$params.minLength.min }} letters.
-        </small>
-      </div>
-
-      <div class="remember-group">
-        <label>
-          <input type="checkbox" class="filled-in" v-model="rememberMe" />
-          <span>Remember me?</span>
-        </label>
-        <router-link
-          to="/forgot-password"
-          class="right primary-text">
-          Forgot password?
-        </router-link>
-      </div>
-
       <div class="input-group -m-0">
         <button
           type="submit"
           class="btn waves-effect waves-light primary white-text">
-          Continue
+          Get Retrieval Link
         </button>
       </div>
     </form>
 
     <template v-slot:footer>
       <div class="delimeter"><span>or</span></div>
-      <div class="input-group -m-0">
-        <button
-          class="btn waves-effect waves-light facebook--login white-text">
-          login with facebook
-        </button>
-      </div>
       <p>
         Don't have an account?
-        <router-link to="/signup" class="primary-text">Sign Up Now</router-link>
+        <router-link to="/signup" class="primary-text">
+          Sign Up Now
+        </router-link>
+      </p>
+      <p>
+        Already have an account?
+        <router-link to="/login" class="primary-text">
+          Login
+        </router-link>
       </p>
     </template>
   </auth-index>
@@ -95,10 +65,10 @@
 import M from 'materialize-css';
 import {
   required,
-  minLength,
   email as emailValidator,
 } from 'vuelidate/lib/validators';
 // Import from files directory.
+import { BASE_API } from '@/config';
 import AuthIndex from '@/components/Auth/AuthIndex.vue';
 
 // export the vue component.
@@ -108,8 +78,6 @@ export default {
   data() {
     return {
       email: '',
-      password: '',
-      rememberMe: false,
       submitting: false,
     };
   },
@@ -123,15 +91,13 @@ export default {
       this.submitting = true;
 
       try {
-        const { data: { message, redirectTo } } = await this.submit();
+        const { data: { message } } = await this.submit();
         // alert success
         M.toast({
           html: `<span class="success">Success!</span>&nbsp;${message}.`,
         });
         // turn off the loader
         this.submitting = false;
-        // redirect when done
-        this.$router.push(redirectTo);
       } catch (e) {
         const { response } = e;
         this.submitting = false;
@@ -158,33 +124,18 @@ export default {
       return true;
     },
     submit() {
-      const { email, password, rememberMe } = this;
-      const redirect = this.$auth.redirect();
-
-      return new Promise((resolve, reject) => {
-        this.$auth.login({
-          rememberMe,
-          fetchUser: true,
-          data: { email, password },
-          success: () => resolve({
-            data: {
-              message: 'Successfully Logged in',
-              redirectTo: redirect ? redirect.from : { name: 'home' },
-            },
-          }),
-          error: e => reject(e),
+      const { email } = this;
+      return this.$http
+        .post(`${BASE_API}/user/password/email`, {
+          email,
+          token: this.$route.params.token,
         });
-      });
     },
   },
   validations: {
     email: {
       required,
       email: emailValidator,
-    },
-    password: {
-      required,
-      minLength: minLength(6),
     },
   },
 };
