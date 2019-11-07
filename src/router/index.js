@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
+    path: '',
     name: 'home',
     component: Home,
     meta: {
@@ -22,8 +22,34 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
-      auth: false,
       title: 'About In-Charge',
+    },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Auth/Login.vue'),
+    meta: {
+      auth: false,
+      title: 'Login to your account - In-Charge',
+    },
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: () => import(/* webpackChunkName: "login" */ '../views/Auth/Signup.vue'),
+    meta: {
+      auth: false,
+      title: 'Create a new account - In-Charge',
+    },
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-passowrd',
+    component: () => import(/* webpackChunkName: "password-forgot" */ '../views/Auth/Forgot.vue'),
+    meta: {
+      auth: false,
+      title: 'Forgot your Password - In-Charge',
     },
   },
   {
@@ -36,11 +62,18 @@ const routes = [
     },
   },
   {
+    path: '/email-verified',
+    name: 'email-verified',
+    component: () => import(/* webpackChunkName: "verified-email" */ '../views/Extras/VerifiedEmail.vue'),
+    meta: {
+      title: '🥳 Congratulations!! You have verified your email',
+    },
+  },
+  {
     path: '*',
     name: 'page-not-found',
     component: () => import(/* webpackChunckName: "page-not-found" */ '../views/Errors/NotFound404.vue'),
     meta: {
-      auth: false,
       title: 'Page Not Found - In-Charge',
     },
   },

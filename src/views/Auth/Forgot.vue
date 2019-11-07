@@ -1,15 +1,15 @@
 <template>
   <auth-index :loading="submitting">
     <template v-slot:title-desktop>
-      Reset Password
+      Forgot Password
     </template>
 
     <template v-slot:title-mobile>
-      Enter a new password
+      Enter the email to retrieve password
     </template>
 
     <template v-slot:subtitle>
-      Please enter a new password for your In-Charge account.
+      Fill in the email address of the account you wish to retrieve password for.
     </template>
 
     <form action="#" @submit.prevent="validateAndSubmit">
@@ -33,41 +33,30 @@
         </small>
       </div>
 
-      <div class="input-group" :class="{ '--error': $v.password.$error }">
-        <label for="password">Enter new password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="***********"
-          autocomplete="new-password"
-          v-model.trim="$v.password.$model">
-
-        <small
-          class="error"
-          v-if="$v.password.$dirty && !$v.password.required">
-          Password is required.
-        </small>
-
-        <small class="error" v-if="!$v.password.minLength">
-          Password must have at least {{ $v.password.$params.minLength.min }} letters.
-        </small>
-      </div>
-      <div class="input-group" :class="{ '--error': $v.confirmPassword.$error }">
-        <label for="confirm-password">Confirm new password</label>
-        <input
-          type="password"
-          id="confirm-password"
-          placeholder="***********"
-          v-model.trim="$v.confirmPassword.$model">
-
-        <small class="error" v-if="!$v.confirmPassword.sameAsPassword">
-          Passwords must be identical.
-        </small>
-      </div>
       <div class="input-group -m-0">
-        <button class="btn waves-effect waves-light primary white-text" type="submit">Next</button>
+        <button
+          type="submit"
+          class="btn waves-effect waves-light primary white-text">
+          Get Retrieval Link
+        </button>
       </div>
     </form>
+
+    <template v-slot:footer>
+      <div class="delimeter"><span>or</span></div>
+      <p>
+        Don't have an account?
+        <router-link to="/signup" class="primary-text">
+          Sign Up Now
+        </router-link>
+      </p>
+      <p>
+        Already have an account?
+        <router-link to="/login" class="primary-text">
+          Login
+        </router-link>
+      </p>
+    </template>
   </auth-index>
 </template>
 
@@ -75,9 +64,7 @@
 // Import from node_modules first
 import M from 'materialize-css';
 import {
-  sameAs,
   required,
-  minLength,
   email as emailValidator,
 } from 'vuelidate/lib/validators';
 // Import from files directory.
@@ -86,14 +73,12 @@ import AuthIndex from '@/components/Auth/AuthIndex.vue';
 
 // export the vue component.
 export default {
-  name: 'auth-reset',
+  name: 'auth-login',
   components: { AuthIndex },
   data() {
     return {
       email: '',
-      password: '',
       submitting: false,
-      confirmPassword: '',
     };
   },
   methods: {
@@ -107,11 +92,12 @@ export default {
 
       try {
         const { data: { message } } = await this.submit();
+        // alert success
         M.toast({
           html: `<span class="success">Success!</span>&nbsp;${message}.`,
         });
+        // turn off the loader
         this.submitting = false;
-        this.$router.push({ name: 'login' });
       } catch (e) {
         const { response } = e;
         this.submitting = false;
@@ -138,12 +124,10 @@ export default {
       return true;
     },
     submit() {
-      const { email, password, confirmPassword } = this;
+      const { email } = this;
       return this.$http
-        .post(`${BASE_API}/user/password/reset`, {
+        .post(`${BASE_API}/user/password/email`, {
           email,
-          password,
-          password_confirmation: confirmPassword,
           token: this.$route.params.token,
         });
     },
@@ -152,13 +136,6 @@ export default {
     email: {
       required,
       email: emailValidator,
-    },
-    password: {
-      required,
-      minLength: minLength(6),
-    },
-    confirmPassword: {
-      sameAsPassword: sameAs('password'),
     },
   },
 };
@@ -207,8 +184,8 @@ export default {
   }
 }
 .remember-group {
-  padding: 10px;
-  font-size: 13px;
+  padding: 10px 0;
+  font-size: 11px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -218,7 +195,7 @@ export default {
     border-radius: 50% !important;
   }
   [type="checkbox"] + span:not(.lever) {
-    font-size: 12px;
+    font-size: 11px;
   }
   [type="checkbox"].filled-in:checked + span:not(.lever):before {
     top: 1px;
