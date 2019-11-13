@@ -37,7 +37,12 @@
         <button
           type="submit"
           class="btn waves-effect waves-light primary white-text">
-          Get Retrieval Link
+          <material-circular-spinner
+            size="tiny"
+            color="white"
+            v-if="submitting"
+            :active="submitting" />
+          <span v-else>Get Retrieval Link</span>
         </button>
       </div>
     </form>
@@ -70,11 +75,12 @@ import {
 // Import from files directory.
 import { BASE_API } from '@/config';
 import AuthIndex from '@/components/Auth/AuthIndex.vue';
+import MaterialCircularSpinner from '@/components/Loader/MaterialCircularSpinner.vue';
 
 // export the vue component.
 export default {
   name: 'auth-login',
-  components: { AuthIndex },
+  components: { AuthIndex, MaterialCircularSpinner },
   data() {
     return {
       email: '',
@@ -167,11 +173,14 @@ export default {
     }
   }
   button {
-    margin: 14px 0;
     width: 100%;
     height: 44px;
+    display: flex;
+    margin: 14px 0;
     font-weight: 600;
     border-radius: 4px;
+    align-items: center;
+    justify-content: center;
     text-transform: capitalize;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
     &.facebook--login {
